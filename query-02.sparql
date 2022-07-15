@@ -1,0 +1,18 @@
+# Gets instances of Workflows within a time window
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX provwf: <https://data.surroundaustralia.com/def/provworkflow/>
+
+SELECT ?w ?lbl ?eat
+WHERE {
+  ?w a provwf:Workflow ;
+  	prov:endedAtTime ?eat ;
+	rdfs:label ?lbl .
+ 
+  BIND(STRDT(SUBSTR(STR(?eat), 0, 20), xsd:dateTime) AS ?eat_nostamp)
+  
+  FILTER (
+    ?eat_nostamp > "2022-07-15T12:43:00"^^xsd:dateTime && ?eat_nostamp < "2022-07-15T14:00:00"^^xsd:dateTime
+  )  
+}
