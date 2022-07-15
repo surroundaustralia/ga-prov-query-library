@@ -1,0 +1,13 @@
+# Gets the Workflow instances for versions of a gien Entity
+# Ordering by workflow execution time, latest first
+
+PREFIX prov: <http://www.w3.org/ns/prov#>
+
+SELECT ?workflow ?eat
+WHERE {
+  ?versionedEntity prov:wasRevisionOf <https://linked.data.gov.au/dataset/floods/hawkesbury-2021> .
+  
+  ?workflow prov:generated ?versionedEntity ;
+            prov:endedAtTime ?eat .
+}
+ORDER BY DESC(?eat)
