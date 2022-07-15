@@ -40,29 +40,3 @@ WHERE {
   FILTER (?class IN (?knownClass))
 }
 ORDER BY DESC(?eat)
-
-
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX prov: <http://www.w3.org/ns/prov#>
-
-SELECT ?source ?linkClass ?target
-WHERE {
-  BIND (<https://linked.data.gov.au/dataset/floods/hawkesbury-2021> AS ?entity)
-
-  {
-    ?versionedEntity prov:wasRevisionOf ?entity .
-    BIND (?versionedEntity AS ?source)
-    BIND (<https://linked.data.gov.au/dataset/floods/hawkesbury-2021> AS ?target)
-    BIND (prov:wasRevisionOf AS ?linkClass)
-  }
-  UNION
-  {
-    ?workflow prov:generated ?versionedEntity .
-    ?versionedEntity prov:wasRevisionOf ?entity .
-	BIND (?workflow AS ?source)
-  	BIND (?versionedEntity AS ?target)
-  	BIND (prov:generated AS ?linkClass)
-  }
-}
-ORDER BY DESC(?eat)
