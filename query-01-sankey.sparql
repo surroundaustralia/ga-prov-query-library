@@ -1,0 +1,68 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+
+SELECT DISTINCT ?iri ?id ?lbl ?class
+WHERE {
+  BIND (<https://linked.data.gov.au/dataset/floods/hawkesbury-2021> AS ?entity)
+  VALUES ?knownClass { "Entity" "Activity" }
+
+  {
+    BIND (<https://linked.data.gov.au/dataset/floods/hawkesbury-2021> AS ?iri)
+    ?entity rdfs:label ?lbl ; rdf:type ?class_ .
+    {?entity a ?knownEntityClass}
+    BIND (STRAFTER(STR(?entity), "https://linked.data.gov.au/dataset/") AS ?id)
+    BIND (STRAFTER(STR(?class_), STR(prov:)) AS ?class)
+  }
+  UNION
+  {
+    ?versionedEntity prov:wasRevisionOf ?entity .
+    
+    BIND (?versionedEntity AS ?iri)
+    ?versionedEntity rdfs:label ?lbl ; rdf:type ?class_ .
+    {?versionedEntity a ?knownEntityClass}
+    BIND (REPLACE(STRAFTER(STR(?versionedEntity), CONCAT(STR(?entity), "/")), "/", "-") AS ?id)
+    BIND (STRAFTER(STR(?class_), STR(prov:)) AS ?class)
+  }
+  UNION
+  {
+    ?workflow prov:generated ?versionedEntity .
+    
+    BIND (?workflow AS ?iri)
+    ?workflow rdfs:label ?lbl ; rdf:type ?class_ .
+    {?workflow a ?knownActivityClass}
+    BIND (STRAFTER(STR(?workflow), "https://data.surroundaustralia.com/dataset/provworkflows/") AS ?id)
+    BIND (STRAFTER(STR(?class_), STR(prov:)) AS ?class)
+  }
+  
+  ?workflow prov:endedAtTime ?eat .
+
+  FILTER (?class IN (?knownClass))
+}
+ORDER BY DESC(?eat)
+
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+
+SELECT ?source ?linkClass ?target
+WHERE {
+  BIND (<https://linked.data.gov.au/dataset/floods/hawkesbury-2021> AS ?entity)
+
+  {
+    ?versionedEntity prov:wasRevisionOf ?entity .
+    BIND (?versionedEntity AS ?source)
+    BIND (<https://linked.data.gov.au/dataset/floods/hawkesbury-2021> AS ?target)
+    BIND (prov:wasRevisionOf AS ?linkClass)
+  }
+  UNION
+  {
+    ?workflow prov:generated ?versionedEntity .
+    ?versionedEntity prov:wasRevisionOf ?entity .
+	BIND (?workflow AS ?source)
+  	BIND (?versionedEntity AS ?target)
+  	BIND (prov:generated AS ?linkClass)
+  }
+}
+ORDER BY DESC(?eat)
