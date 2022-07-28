@@ -17,6 +17,10 @@ The second uses the same logic as the standard query but produces 'nodes' and 'e
 
 The queries are linked by number _query-01-..._ and the scenario they address is noted in comments at the top of the standard SPARQL query variant.
 
+# Provenance Store
+
+The provenance stored currently used for GA Provenance is a [Jena Fuseki instance hosted on AWS](http://digital-atlas-lb-1137864764.ap-southeast-2.elb.amazonaws.com:3200/#/).
+
 ## Contact
 Developers:  
 

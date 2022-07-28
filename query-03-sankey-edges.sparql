@@ -1,0 +1,28 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX hawkesbury: <https://linked.data.gov.au/dataset/floods/hawkesbury-2021>
+
+SELECT DISTINCT ?source ?target ?linkClass
+WHERE {
+  VALUES ?workflow {pwfs:a7a99e2f-0971-11ed-bee3-8b1d5e0c55d6}
+
+    {
+    ?workflow provwf:hadBlock ?block .
+    ?block prov:used ?entity ;
+           a provwf:Block .
+    BIND (?block AS ?target)
+    BIND (?entity AS ?source)
+    BIND (prov:used AS ?linkClass)
+  }
+  UNION
+      {
+    ?workflow provwf:hadBlock ?block .
+    ?block prov:generated ?entity ;
+           a provwf:Block .
+    BIND (?block AS ?source)
+    BIND (?entity AS ?target)
+    BIND (prov:generated AS ?linkClass)
+  }
+}
+ORDER BY DESC(?eat)
