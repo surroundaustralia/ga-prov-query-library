@@ -1,0 +1,10 @@
+# What workflows used common sub-workflow activities?
+
+# given ?b
+
+PREFIX provwf: <https://data.surroundaustralia.com/def/provworkflow/>
+
+SELECT ?w
+WHERE {
+    ?w provwf:hadBlock ?b .
+}

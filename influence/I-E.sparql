@@ -1,0 +1,19 @@
+# What data objects are dependent on a given data object?
+
+# given ?e
+
+PREFIX prov: <http://www.w3.org/ns/prov#>
+
+SELECT ?x
+WHERE {
+    ?x prov:wasDerivedFrom+ ?e
+}
+
+# forward chain:
+#   prov:wasDerivedFrom = prov:wasrevisionOf
+#
+#   prov:wasDerivedFrom = prov:wasGeneratedBy/prov:used
+#
+#   prov:wasDerivedFrom = 
+#       ?a prov:used ?e
+#       ?a prov:generated ?x

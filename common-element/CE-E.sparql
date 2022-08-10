@@ -1,0 +1,13 @@
+# What workflows used a given data object?
+
+# given ?e
+
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX provwf: <https://data.surroundaustralia.com/def/provworkflow/>
+
+SELECT ?w
+WHERE {
+    { ?w prov:used ?e }
+    UNION
+    { ?w provwf:hadBlock/prov:used ?e }
+}

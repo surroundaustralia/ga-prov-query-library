@@ -1,0 +1,17 @@
+# What are the start & end times and success statuses of all workflows?
+
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX provwf: <https://data.surroundaustralia.com/def/provworkflow/>
+
+SELECT ?w ?sat ?eat ?status
+WHERE {
+    ?w 
+        a provwf:Workflow ;
+        prov:startedAtTime ?sat ;
+        prov:endedAtTime ?eat ;
+#        ex:status ?status
+    .
+}
+ORDER BY ?sat ?w
+
+# status not yet catered for

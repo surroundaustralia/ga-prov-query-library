@@ -1,0 +1,21 @@
+# What workflows did a given Agent run?
+
+# given ?ag
+
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX provwf: <https://data.surroundaustralia.com/def/provworkflow/>
+
+SELECT ?w ?sat ?eat ?status
+WHERE {
+    ?w prov:wasAssociatedWith/prov:actedOnBehalfOf? ?ag .
+
+    ?w
+        a provwf:Workflow ;
+        prov:startedAtTime ?sat ;
+        prov:endedAtTime ?eat ;
+#        ex:status ?status
+    .
+}
+ORDER BY ?sat ?w
+
+# status not yet catered for
