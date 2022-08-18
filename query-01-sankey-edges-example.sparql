@@ -1,14 +1,13 @@
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX prov: <http://www.w3.org/ns/prov#>
-SELECT ?source ?linkClass ?target
+SELECT DISTINCT ?source ?target ?linkClass
 WHERE {
-    BIND (<https://linked.data.gov.au/dataset/floods/hawkesbury-2021> AS ?entity)
-
+    BIND (hawkesbury: AS ?entity)
     {
         ?versionedEntity prov:wasRevisionOf ?entity .
         BIND (?versionedEntity AS ?source)
-        BIND (<https://linked.data.gov.au/dataset/floods/hawkesbury-2021> AS ?target)
+        BIND (hawkesbury: AS ?target)
         BIND (prov:wasRevisionOf AS ?linkClass)
     }
     UNION

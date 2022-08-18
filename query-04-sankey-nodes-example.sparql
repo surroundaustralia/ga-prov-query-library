@@ -1,0 +1,39 @@
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX provwf: <https://data.surroundaustralia.com/def/provworkflow/>
+PREFIX block: <https://surroundaustralia/blocks/io/>
+SELECT DISTINCT ?iri ?id ?lbl ?class ?data_value ?timestamp
+WHERE {
+    {
+        ?block a block:python-read-postgres ;
+        prov:generated ?iri .
+        ?iri a ?class_ ;
+        prov:value ?data_value ;
+        dcterms:created ?timestamp ;
+        rdfs:label ?lbl ;
+        BIND (STRAFTER(STR(?iri), "https://data.surroundaustralia.com/dataset/provworkflows/") AS ?id)
+        BIND (STRAFTER(STR(?class_), STR(prov:)) AS ?class)
+    }
+    UNION
+    {
+        ?block a block:python-read-postgres ;
+        prov:used ?iri .
+        ?iri a ?class_ ;
+        rdfs:label ?lbl ;
+        prov:value ?data_value ;
+        dcterms:created ?timestamp ;
+        BIND (STRAFTER(STR(?iri), "https://data.surroundaustralia.com/dataset/provworkflows/") AS ?id)
+        BIND ("Block" AS ?class)
+    }
+    UNION
+    {
+        BIND(block:python-read-postgres AS ?iri)
+        BIND("Python Read Postgres Block" AS ?lbl)
+        BIND ("python-read-postgres" AS ?id)
+        BIND ("Block" AS ?class)
+        BIND ("N/A" AS ?data_value)
+        BIND ("N/A" AS ?timestamp)
+    }
+}

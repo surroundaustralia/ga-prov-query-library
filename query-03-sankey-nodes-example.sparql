@@ -7,7 +7,6 @@ WHERE {
     BIND (hawkesbury: AS ?entity)
     VALUES ?knownClass { prov:Activity prov:Entity provwf:Block }
     VALUES ?workflow {pwfs:a7a99e2f-0971-11ed-bee3-8b1d5e0c55d6}
-
     {
         ?workflow provwf:hadBlock ?block .
         ?block a ?class_ .
@@ -18,9 +17,7 @@ WHERE {
         BIND (STRAFTER(STR(?block), "https://data.surroundaustralia.com/dataset/provworkflows/") AS ?id)
         BIND (STRAFTER(STR(?class_), STR(provwf:)) AS ?class)
     }
-
     UNION
-
     {
         # block's used entities
         ?workflow provwf:hadBlock ?block .
@@ -31,9 +28,7 @@ WHERE {
         BIND (STRAFTER(STR(?iri), STR(pwfs:)) AS ?id)
         BIND (STRAFTER(STR(?class_), STR(prov:)) AS ?class)
     }
-
     UNION
-
     {
         # block's generated entities
         ?workflow provwf:hadBlock ?block .
@@ -44,7 +39,6 @@ WHERE {
         BIND (STRAFTER(STR(?iri), STR(pwfs:)) AS ?id)
         BIND (STRAFTER(STR(?class_), STR(prov:)) AS ?class)
     }
-
     FILTER (?class_ IN (?knownClass))
 }
 ORDER BY DESC(?eat)

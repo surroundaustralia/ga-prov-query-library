@@ -1,0 +1,24 @@
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX provwf: <https://data.surroundaustralia.com/def/provworkflow/>
+PREFIX block: <https://surroundaustralia/blocks/io/>
+SELECT DISTINCT ?source ?target ?linkClass
+WHERE {
+    {
+        BIND(block:python-read-postgres AS ?source)
+        ?instance_of_source a ?source ;
+        prov:generated ?target .
+        ?target a ?class_ ;
+        BIND (prov:generated AS ?linkClass)
+    }
+    UNION
+    {
+        BIND(block:python-read-postgres AS ?target)
+        ?instance_of_target a ?target ;
+        prov:used ?source .
+        ?source a ?class_ ;
+        BIND (prov:used AS ?linkClass)
+    }
+}

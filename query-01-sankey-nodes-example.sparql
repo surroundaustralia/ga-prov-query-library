@@ -3,12 +3,12 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX prov: <http://www.w3.org/ns/prov#>
 SELECT DISTINCT ?iri ?id ?lbl ?class
 WHERE {
-    BIND (<https://linked.data.gov.au/dataset/floods/hawkesbury-2021> AS ?entity)
+    BIND (hawkesbury: AS ?entity)
     VALUES ?knownClass { "Entity" "Activity" }
 
     {
-        BIND (<https://linked.data.gov.au/dataset/floods/hawkesbury-2021> AS ?iri)
-        ?entity rdfs:label ?lbl ; rdf:type ?class_ .
+        BIND (hawkesbury: AS ?iri)
+        ?entity rdfs:label ?lbl ; a ?class_ .
         {?entity a ?knownEntityClass}
         BIND (STRAFTER(STR(?entity), "https://linked.data.gov.au/dataset/") AS ?id)
         BIND (STRAFTER(STR(?class_), STR(prov:)) AS ?class)
@@ -18,7 +18,7 @@ WHERE {
         ?versionedEntity prov:wasRevisionOf ?entity .
 
         BIND (?versionedEntity AS ?iri)
-        ?versionedEntity rdfs:label ?lbl ; rdf:type ?class_ .
+        ?versionedEntity rdfs:label ?lbl ; a ?class_ .
         {?versionedEntity a ?knownEntityClass}
         BIND (REPLACE(STRAFTER(STR(?versionedEntity), CONCAT(STR(?entity), "/")), "/", "-") AS ?id)
         BIND (STRAFTER(STR(?class_), STR(prov:)) AS ?class)
@@ -28,7 +28,7 @@ WHERE {
         ?workflow prov:generated ?versionedEntity .
 
         BIND (?workflow AS ?iri)
-        ?workflow rdfs:label ?lbl ; rdf:type ?class_ .
+        ?workflow rdfs:label ?lbl ; a ?class_ .
         {?workflow a ?knownActivityClass}
         BIND (STRAFTER(STR(?workflow), "https://data.surroundaustralia.com/dataset/provworkflows/") AS ?id)
         BIND (STRAFTER(STR(?class_), STR(prov:)) AS ?class)
